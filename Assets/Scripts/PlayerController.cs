@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,10 +6,11 @@ using UnityEngine.UI;
 public class PlayerController : NetworkBehaviour
 {
 	public float moveSpeed = 5f;
-	private Camera playerCam;
-	public Slider healthSlider;
-	NetworkVariable<int> healthVar = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 	public Rigidbody rb;
+	public Slider healthSlider;
+	private NetworkVariable<int> healthVar = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+	private Camera playerCam;
+
 	private void Start()
 	{
 		if (IsOwner)

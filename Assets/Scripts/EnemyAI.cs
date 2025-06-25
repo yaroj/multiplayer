@@ -1,5 +1,4 @@
-using Unity.Netcode;
-using Unity.VisualScripting;
+﻿using Unity.Netcode;
 using UnityEngine;
 
 public class EnemyAI : NetworkBehaviour
@@ -20,6 +19,8 @@ public class EnemyAI : NetworkBehaviour
 		GameObject closest = PlayerManager.GetClosestPlayer(transform.position);
 		if(closest == null) return;
 		Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);//in future I may add bulletPool but not now
+																						   //На що НЕ варто витрачати час:
+																						   //Оптимізація під велику кількість об'єктів.
 		bullet.NetworkObject.Spawn();
 		var v = closest.transform.position - transform.position;
 		v.y = 0;
