@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2388836797889974886}
   - component: {fileID: 5606478414792211834}
   - component: {fileID: 6861309913833282895}
+  - component: {fileID: -4380415821918055820}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -121,3 +122,34 @@ MonoBehaviour:
   bulletPrefab: {fileID: 2714495628269686459, guid: a5771080b3425bb4cb3660456c3970a0, type: 3}
   shootInterval: 2
   bulletSpeed: 10
+--- !u!114 &-4380415821918055820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383752539302273697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0

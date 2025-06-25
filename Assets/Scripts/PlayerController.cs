@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +10,6 @@ public class PlayerController : NetworkBehaviour
 	private Camera playerCam;
 	public Slider healthSlider;
 	NetworkVariable<int> healthVar = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-	public int health = 100;
 
 	private void Start()
 	{
@@ -19,8 +20,23 @@ public class PlayerController : NetworkBehaviour
 			playerCam.transform.localPosition = new Vector3(0, 10, -10);
 			playerCam.transform.localEulerAngles = new Vector3(45, 0, 0);
 			healthSlider = GameObject.Find("PlayerHealth").GetComponent<Slider>();
+			healthVar.OnValueChanged += OnHealthChanged;
 		}
 	}
+
+
+	//only executed for owner
+	private void OnHealthChanged(int previousValue, int newValue)
+	{
+		healthSlider.value = newValue;
+		if (newValue <= 0)
+		{
+			DieAsOwner();
+
+		}
+		
+	}
+
 
 	private void Update()
 	{
@@ -30,53 +46,43 @@ public class PlayerController : NetworkBehaviour
 		float v = Input.GetAxis("Vertical");
 
 		MoveServerRpc(h, v);
-
-		if (!IsServer)
-		{
-			if (healthSlider.value != healthVar.Value)
-			{
-				TakeDamage(healthVar.Value - (int)healthSlider.value);
-			}
-		}
 	}
 
+
+	//only host is gonna receive this call for every player  so guests will never get this
 	public void TakeDamage(int damage)
 	{
 		if (IsServer)
 		{
+			print(healthVar.Value);
 			healthVar.Value -= damage;
-			if (!IsOwner && healthVar.Value <= 0)
+			if(healthVar.Value <= 0 && !IsOwner)
 			{
-				GetComponent<Collider>().enabled = false;
-				GetComponent<MeshRenderer>().enabled = false;
-
-
+				gameObject.SetActive(false);
+				MonoBehaviour camMono = Camera.main.GetComponent<MonoBehaviour>();
+				//Use it to start your coroutine function
+				camMono.StartCoroutine(DespawnLater());
 			}
 		}
-		if (IsOwner)
-		{
-			healthSlider.value = healthVar.Value;
-			if (healthSlider.value <= 0)
-			{
-				DieAsOwner();
-			}
-		}
+
 	}
+
+	IEnumerator DespawnLater()
+	{
+		yield return new WaitForSeconds(2f);
+		NetworkObject.Despawn();
+	}
+
 	[ServerRpc]
 	void MoveServerRpc(float h, float v)
 	{
-
-		transform.Translate(new Vector3(h, 0, v) * moveSpeed * Time.deltaTime);
+		transform.Translate(moveSpeed * Time.deltaTime * new Vector3(h, 0, v));
 	}
 
 	private void DieAsOwner()
 	{
 		playerCam.transform.SetParent(null);
-		GetComponent<Collider>().enabled = false;
-		GetComponent<MeshRenderer>().enabled = false;
-		if (TryGetComponent<Rigidbody>(out var rb))
-		{
-			Destroy(rb);
-		}
+		gameObject.SetActive(false);
+
 	}
 }
