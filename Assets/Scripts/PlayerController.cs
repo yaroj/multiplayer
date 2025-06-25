@@ -22,6 +22,10 @@ public class PlayerController : NetworkBehaviour
 			healthSlider = GameObject.Find("PlayerHealth").GetComponent<Slider>();
 			healthVar.OnValueChanged += OnHealthChanged;
 		}
+		if (IsServer)
+		{
+			PlayerManager.RegisterPlayer(gameObject);
+		}
 	}
 
 
