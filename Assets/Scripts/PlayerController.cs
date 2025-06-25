@@ -10,7 +10,7 @@ public class PlayerController : NetworkBehaviour
 	private Camera playerCam;
 	public Slider healthSlider;
 	NetworkVariable<int> healthVar = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
+	public Rigidbody rb;
 	private void Start()
 	{
 		if (IsOwner)
@@ -76,7 +76,8 @@ public class PlayerController : NetworkBehaviour
 	[ServerRpc]
 	void MoveServerRpc(float h, float v)
 	{
-		transform.Translate(moveSpeed * Time.deltaTime * new Vector3(h, 0, v));
+		rb.velocity = moveSpeed * new Vector3(h, 0, v);
+		//transform.Translate(moveSpeed * Time.deltaTime * new Vector3(h, 0, v));
 	}
 
 	private void DieAsOwner()

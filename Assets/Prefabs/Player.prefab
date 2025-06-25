@@ -171,7 +171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   healthSlider: {fileID: 0}
-  health: 100
+  rb: {fileID: 7680868982929249935}
 --- !u!114 &-5782413763393247538
 MonoBehaviour:
   m_ObjectHideFlags: 0
