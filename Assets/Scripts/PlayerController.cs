@@ -64,8 +64,8 @@ public class PlayerController : NetworkBehaviour
 			{
 				gameObject.SetActive(false);
 				MonoBehaviour camMono = Camera.main.GetComponent<MonoBehaviour>();
-				//Use it to start your coroutine function
 				camMono.StartCoroutine(DespawnLater());
+				PlayerManager.UnregisterPlayer(gameObject);
 			}
 		}
 
