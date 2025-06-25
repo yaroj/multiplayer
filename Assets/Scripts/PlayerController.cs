@@ -77,7 +77,6 @@ public class PlayerController : NetworkBehaviour
 	void MoveServerRpc(float h, float v)
 	{
 		rb.velocity = moveSpeed * new Vector3(h, 0, v);
-		//transform.Translate(moveSpeed * Time.deltaTime * new Vector3(h, 0, v));
 	}
 
 	private void DieAsOwner()
