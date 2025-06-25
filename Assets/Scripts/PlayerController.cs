@@ -28,12 +28,12 @@ public class PlayerController : NetworkBehaviour
 
 		float h = Input.GetAxis("Horizontal");
 		float v = Input.GetAxis("Vertical");
-		
+
 		MoveServerRpc(h, v);
 
 		if (!IsServer)
 		{
-			if(healthSlider.value != healthVar.Value)
+			if (healthSlider.value != healthVar.Value)
 			{
 				TakeDamage(healthVar.Value - (int)healthSlider.value);
 			}
@@ -45,24 +45,20 @@ public class PlayerController : NetworkBehaviour
 		if (IsServer)
 		{
 			healthVar.Value -= damage;
-			if(!IsOwner && healthVar.Value <= 0)
+			if (!IsOwner && healthVar.Value <= 0)
 			{
 				GetComponent<Collider>().enabled = false;
 				GetComponent<MeshRenderer>().enabled = false;
-				
+
 
 			}
 		}
 		if (IsOwner)
 		{
 			healthSlider.value = healthVar.Value;
-			if(healthSlider.value <= 0)
+			if (healthSlider.value <= 0)
 			{
-				GetComponent<Collider>().enabled = false;
-				GetComponent<MeshRenderer>().enabled = false;
-				var rb = GetComponent<Rigidbody>();
-				rb.isKinematic = false;
-				rb.velocity = Vector3.zero;
+				DieAsOwner();
 			}
 		}
 	}
@@ -71,5 +67,16 @@ public class PlayerController : NetworkBehaviour
 	{
 
 		transform.Translate(new Vector3(h, 0, v) * moveSpeed * Time.deltaTime);
+	}
+
+	private void DieAsOwner()
+	{
+		playerCam.transform.SetParent(null);
+		GetComponent<Collider>().enabled = false;
+		GetComponent<MeshRenderer>().enabled = false;
+		if (TryGetComponent<Rigidbody>(out var rb))
+		{
+			Destroy(rb);
+		}
 	}
 }

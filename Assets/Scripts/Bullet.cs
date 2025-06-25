@@ -22,7 +22,6 @@ public class Bullet : NetworkBehaviour
 		{
 			player.TakeDamage(damage);
 			GetComponent<NetworkObject>().Despawn();
-			print("attempting despawning");
 		}
 	}
 }
